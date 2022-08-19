@@ -17,9 +17,10 @@ The daemon would expose a JSON-RPC endpoint that supports the following actions:
 * **share** - shares a directory or file on the local filesystem
 * **unshare** - unshares a directory or file on the local filesystem
 * **filter** - searches the *local library* for a regex and returns matching shared files
-* **change_config** - changes the named configuration setting to a new value
+* **change_config** - changes the named configuration setting(s) to a new value
 * **hash_stats** - provided the hash of a file, returns verbose statistics about files matching that hash
 * **status** - returns metrics about the daemon itself such as uptime, connection status, etc.
+* **reload** - reloads the MuWire core without restarting the daemon process
 * **shutdown** - gracefully shuts down the daemon
 
 ## Integration with console
