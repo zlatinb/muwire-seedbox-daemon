@@ -14,12 +14,12 @@ There has been some demand for a "Seedbox"-type solutions where a headless daemo
 
 The daemon would expose a JSON-RPC endpoint that supports the following actions:
 
-**share** - shares a directory or file on the local filesystem
-**unshare** - unshares a directory or file on the local filesystem
-**filter** - searches the *local library* for a regex and returns matching shared files
-**hash_stats** - provided the hash of a file, returns verbose statistics about files matching that hash
-**status** - returns metrics about the daemon itself such as uptime, connection status, etc.
-**shutdown** - gracefully shuts down the daemon
+* **share** - shares a directory or file on the local filesystem
+* **unshare** - unshares a directory or file on the local filesystem
+* **filter** - searches the *local library* for a regex and returns matching shared files
+* **hash_stats** - provided the hash of a file, returns verbose statistics about files matching that hash
+* **status** - returns metrics about the daemon itself such as uptime, connection status, etc.
+* **shutdown** - gracefully shuts down the daemon
 
 ## Integration with console
 
