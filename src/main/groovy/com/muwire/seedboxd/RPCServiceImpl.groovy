@@ -18,6 +18,7 @@ class RPCServiceImpl implements RPCService {
         rv.allFilesLoaded = coreService.allFilesLoaded
         rv.i2pRouterConnected = coreService.i2pRouterConnected
         rv.sharedFiles = coreService.getCore().getFileManager().getFileToSharedFile().size()
+        rv.muwireName = coreService.getCore().getMe().getHumanReadableName()
         rv
     }
     
