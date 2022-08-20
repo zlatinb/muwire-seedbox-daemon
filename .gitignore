@@ -7,3 +7,6 @@
 **/.classpath
 **/*.rej
 **/*.orig
+
+# ignore lcoal props during development
+application.properties
