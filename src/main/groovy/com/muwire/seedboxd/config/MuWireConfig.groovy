@@ -11,7 +11,11 @@ class MuWireConfig {
     @MuWireNickname
     final String nickname
     
-    MuWireConfig(String nickname) {
+    @WriteableDir
+    final File workDir
+    
+    MuWireConfig(String nickname, File workDir) {
         this.nickname = nickname
+        this.workDir = workDir
     }
 }
