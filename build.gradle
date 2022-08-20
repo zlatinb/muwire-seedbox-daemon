@@ -40,12 +40,17 @@ dependencies {
     implementation "com.muwire:core:${muwireCoreVersion}"
     implementation 'com.github.briandilley.jsonrpc4j:jsonrpc4j:1.6'
 
+
     implementation "org.codehaus.groovy:groovy:${groovyVersion}"
     implementation "org.codehaus.groovy:groovy-jsr223:${groovyVersion}"
     implementation "org.codehaus.groovy:groovy-json:${groovyVersion}"
     runtimeOnly "com.h2database:h2:1.4.200"
     runtimeOnly "org.codehaus.groovy:groovy-sql:${groovyVersion}"
 
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    runtimeOnly 'org.hibernate:hibernate-validator:7.0.5.Final'
+
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
