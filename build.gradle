@@ -1,0 +1,56 @@
+buildscript {
+
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.7.3'
+}
+
+apply plugin : 'application'
+apply plugin : 'io.spring.dependency-management'
+apply plugin : 'groovy'
+
+application {
+    mainClassName = 'com.muwire.seedboxd.SeedboxD'
+    applicationDefaultJvmArgs = ['-Djava.util.logging.config.file=logging.properties',"-Dbuild.version=${project.version}"]
+    applicationName = 'mwseedboxd'
+}
+
+springBoot {
+    buildInfo {
+        properties {
+            version = "${project.version}"
+            name = "mwseedboxd"
+        }
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.muwire:core:${muwireCoreVersion}"
+    implementation 'com.github.briandilley.jsonrpc4j:jsonrpc4j:1.6'
+
+    implementation "org.codehaus.groovy:groovy:${groovyVersion}"
+    implementation "org.codehaus.groovy:groovy-jsr223:${groovyVersion}"
+    implementation "org.codehaus.groovy:groovy-json:${groovyVersion}"
+    runtimeOnly "com.h2database:h2:1.4.200"
+    runtimeOnly "org.codehaus.groovy:groovy-sql:${groovyVersion}"
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    runtimeOnly 'javax.jws:jsr181-api:1.0-MR1'
+}

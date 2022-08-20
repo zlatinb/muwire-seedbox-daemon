@@ -1,0 +1,9 @@
+.idea
+**/bin
+**/.settings
+**/build
+.gradle
+**/.project
+**/.classpath
+**/*.rej
+**/*.orig
