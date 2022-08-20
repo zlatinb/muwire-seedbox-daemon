@@ -37,8 +37,48 @@ The MuWIre core is not published to MavenCentral so it needs to be build locally
 2. Execute `./gradlew core:publish` 
 
 ## Quick start
+1. Create a file called `application.properties` in the current working directory.
+
+The following configuration options are supported
+
+|Name|Description|Required|
+|---|---|---|
+|i2p.host|Host where the I2P or I2Pd router is running|yes|
+|i2p.port|Port on which the I2CP interface is listening|yes|
+|i2p.tunnelLength|How long should the tunnels be |yes|
+|i2p.tunnelQuantity|How many tunnels to build|yes|
+|i2p.tunnelName|Name of the tunnel to report to the I2P router | No|
+|muwire.nickname|NIckname to use on the MuWire network|Yes|
+|muwire.workDir|Directory to use for storing file indices and others|Yes|
+|rpc.iface|Interface on which to bind the JSON-RPC endpoint|Yes|
+|rpc.port|Port on which to bind the JSON RPC endpoint|Yes|
+
+2. Execute
 ```
 ./gradlew bootRun
 ```
 
+## Try some commands
+
+Assuming that you bound the rpc interface to localhost:12345
+
+To check the current status of the seedbox daemon:
+```
+curl  -d '{"id":0,"method":"status"}' http://localhost:12345/seedbox
+```
+
+To share a file or directory on the local filesystem:
+```
+curl  -d '{"id":0,"method":"share", "params":["/absolute/path"]}' http://localhost:12345/seedbox
+```
+
+To un-share a file or directory that is currently shared:
+```
+curl  -d '{"id":0,"method":"unsharePath", "params":["/absolute/path"]}' http://localhost:12345/seedbox
+```
+
+To shut down the daemon gracefully:
+```
+curl  -d '{"id":0,"method":"shutdown"}' http://localhost:12345/seedbox
+```
 
