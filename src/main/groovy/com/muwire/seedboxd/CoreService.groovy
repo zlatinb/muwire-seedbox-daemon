@@ -18,8 +18,8 @@ class CoreService {
     private final MuWireConfig muWireConfig
     
     private Core core
-    private volatile boolean allFilesLoaded
-    private volatile boolean i2pRouterConnected
+    volatile boolean allFilesLoaded
+    volatile boolean i2pRouterConnected
     
     CoreService(I2PConfig i2PProperties, MuWireConfig muWireConfig) {
         this.i2PProperties = i2PProperties
