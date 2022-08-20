@@ -26,4 +26,18 @@ The daemon would expose a JSON-RPC endpoint that supports the following actions:
 ## Integration with console
 
 The daemon is intended to be integrated with a seedbox console which manages one or more such daemons.
- 
+
+# Building
+
+## One-time building of the MuWire core artifact
+
+The MuWIre core is not published to MavenCentral so it needs to be build locally.  You only need to perform this step once:
+1. Clone the `muwire` project
+2. Execute `./gradlew core:publish` 
+
+## Quick start
+```
+./gradlew bootRun
+```
+
+
