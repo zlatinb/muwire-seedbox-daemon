@@ -19,7 +19,9 @@ apply plugin : 'groovy'
 
 
 bootJar {
-    launchScript()
+    launchScript {
+        properties 'inlinedConfScript':'inlined.conf'
+    }
 }
 
 springBoot {
