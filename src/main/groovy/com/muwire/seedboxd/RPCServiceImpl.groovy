@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.stereotype.Component
 
+
 @Component
 class RPCServiceImpl implements RPCService {
     
@@ -75,6 +76,7 @@ class RPCServiceImpl implements RPCService {
     
     boolean shutdown() {
         LoggerFactory.getILoggerFactory().getLogger(Logger.ROOT_LOGGER_NAME).setLevel(Level.OFF)
+        Thread.setDefaultUncaughtExceptionHandler({t,e -> } as Thread.UncaughtExceptionHandler)
         coreService.getCore().shutdown()
         def shutdowner = {
             Thread.sleep(100)
