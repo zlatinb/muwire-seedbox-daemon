@@ -1,14 +1,15 @@
 package com.muwire.seedboxd
 
-import com.muwire.core.Core
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
 import com.muwire.core.InfoHash
 import com.muwire.core.SharedFile
 import com.muwire.core.files.DirectoryUnsharedEvent
 import com.muwire.core.files.FileSharedEvent
 import com.muwire.core.files.FileUnsharedEvent
 import net.i2p.data.Base64
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.SpringApplication
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.stereotype.Component
 
@@ -73,6 +74,7 @@ class RPCServiceImpl implements RPCService {
     }
     
     boolean shutdown() {
+        LoggerFactory.getILoggerFactory().getLogger(Logger.ROOT_LOGGER_NAME).setLevel(Level.OFF)
         coreService.getCore().shutdown()
         def shutdowner = {
             Thread.sleep(100)
