@@ -28,10 +28,14 @@ class I2PConfig {
     @Max(value = 6L, message = "Too many tunnels")
     final int tunnelQuantity
     
-    I2PConfig (InetAddress host, int port, int tunnelLength, int tunnelQuantity) {
+    final String tunnelName
+    
+    I2PConfig (InetAddress host, int port, int tunnelLength, int tunnelQuantity,
+        String tunnelName) {
         this.host = host
         this.port = port
         this.tunnelLength = tunnelLength
         this.tunnelQuantity = tunnelQuantity
+        this.tunnelName = tunnelName
     }
 }
