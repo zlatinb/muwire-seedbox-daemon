@@ -14,14 +14,12 @@ plugins {
     id 'org.springframework.boot' version '2.7.3'
 }
 
-apply plugin : 'application'
 apply plugin : 'io.spring.dependency-management'
 apply plugin : 'groovy'
 
-application {
-    mainClassName = 'com.muwire.seedboxd.SeedboxD'
-    applicationDefaultJvmArgs = ['-Djava.util.logging.config.file=logging.properties',"-Dbuild.version=${project.version}"]
-    applicationName = 'mwseedboxd'
+
+bootJar {
+    launchScript()
 }
 
 springBoot {
