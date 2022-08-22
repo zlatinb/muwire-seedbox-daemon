@@ -28,16 +28,16 @@ The daemon would expose a JSON-RPC endpoint that supports the following actions:
 
 The daemon is intended to be integrated with a seedbox console which manages one or more such daemons.
 
-# Building
+## Building
 
-## One-time building of the MuWire core artifact
-
-The MuWIre core is not published to MavenCentral so it needs to be build locally.  You only need to perform this step once:
+The MuWIre core is not published to MavenCentral so it needs to be build locally.  You only need to perform this step once.
 1. Clone the `muwire` project
-2. Execute `./gradlew core:publish` 
+2. Execute `./gradlew core:publish` in that project
+3. Back to this project, execute `./gradlew assemble`
+3. An executable .jar file will be created in `build/libs`
 
-## Quick start
-1. Create a file called `application.properties` in the current working directory.
+## Configuration
+Create a file called `application.properties` in the same directory as the .jar file.
 
 The following configuration options are supported
 
@@ -53,10 +53,17 @@ The following configuration options are supported
 |rpc.iface|Interface on which to bind the JSON-RPC endpoint|Yes|
 |rpc.port|Port on which to bind the JSON RPC endpoint|Yes|
 
-2. Execute
+Optionally, you can enable `Actuator` endpoints for many metrics by adding the following property:
 ```
-./gradlew bootRun
+management.endpoints.web.exposure.include=*
 ```
+Go to `/actuator` to asee all available endpoints.  MuWire-specific metrics are available at `/actuator/muwire`
+
+
+## Running
+The jar built in the previous step is executable on Linux systems.  You can integrate it with systemd or system V if you like.  The `application.properties` file needs to be in the same directory as the jar file when it's launched.
+
+If everything goes well, the Spring Boot logo will be printed to stdout.
 
 ## Try some commands
 
