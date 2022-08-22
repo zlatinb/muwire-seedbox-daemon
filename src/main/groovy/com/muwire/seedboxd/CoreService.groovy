@@ -114,6 +114,7 @@ class CoreService {
     
     void onUploadFinishedEvent(UploadFinishedEvent event) {
         activeUploaders.remove(event.uploader)
+        status.totalUploadedBytes += event.uploader.dataSinceLastRead()
     }
     
     SeedboxStatus getStatus() {
