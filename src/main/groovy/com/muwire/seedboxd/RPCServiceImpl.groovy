@@ -21,12 +21,7 @@ class RPCServiceImpl implements RPCService {
     @Autowired ConfigurableApplicationContext ctx
     
     SeedboxStatus status() {
-        SeedboxStatus rv = new SeedboxStatus()
-        rv.allFilesLoaded = coreService.allFilesLoaded
-        rv.i2pRouterConnected = coreService.i2pRouterConnected
-        rv.sharedFiles = coreService.getCore().getFileManager().getFileToSharedFile().size()
-        rv.muwireName = coreService.getCore().getMe().getHumanReadableName()
-        rv
+        coreService.getStatus()
     }
     
     boolean share(String path) {

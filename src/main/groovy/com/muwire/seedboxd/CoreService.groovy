@@ -5,7 +5,13 @@ import com.muwire.core.MuWireSettings
 import com.muwire.core.RouterConnectedEvent
 import com.muwire.core.RouterDisconnectedEvent
 import com.muwire.core.UILoadedEvent
+import com.muwire.core.connection.Connection
 import com.muwire.core.files.AllFilesLoadedEvent
+import com.muwire.core.hostcache.HostCache
+import com.muwire.core.upload.UploadEvent
+import com.muwire.core.upload.UploadFinishedEvent
+import com.muwire.core.upload.Uploader
+import com.muwire.core.util.BandwidthCounter
 import com.muwire.seedboxd.config.I2PConfig
 import com.muwire.seedboxd.config.MuWireConfig
 import org.springframework.stereotype.Service
@@ -18,12 +24,17 @@ class CoreService {
     private final MuWireConfig muWireConfig
     
     private Core core
-    volatile boolean allFilesLoaded
-    volatile boolean i2pRouterConnected
+    
+    private final SeedboxStatus status = new SeedboxStatus()
+    private final List<Uploader> activeUploaders = Collections.synchronizedList(new ArrayList<>())
+    private final BandwidthCounter speedOutCounter = new BandwidthCounter(10)
+    
+    private final Timer timer = new Timer("UpSpeedTracker", true)
     
     CoreService(I2PConfig i2PProperties, MuWireConfig muWireConfig) {
         this.i2PProperties = i2PProperties
         this.muWireConfig = muWireConfig
+        this.timer.schedule({collectBandwidth()} as TimerTask, 1000, 1000)
     }
     
     public Core getCore() {
@@ -58,25 +69,78 @@ class CoreService {
         // TODO: set reasonable defaults for other values
         
         core = new Core(muWireSettings, home, "0.8.12") // version doesn't matter
+        status.muwireName = core.me.getHumanReadableName()
         core.eventBus.with {
             register(AllFilesLoadedEvent.class, this)
             register(RouterConnectedEvent.class, this)
             register(RouterDisconnectedEvent.class, this)
-            
+            register(UploadEvent.class, this)
+            register(UploadFinishedEvent.class, this)
+
             publish(new UILoadedEvent())
         }
         core.startServices()
     }
     
     void onAllFilesLoadedEvent(AllFilesLoadedEvent event) {
-        allFilesLoaded = true
+        status.allFilesLoaded = true
     }
     
     void onRouterConnectedEvent(RouterConnectedEvent event) {
-        i2pRouterConnected = true
+        status.i2pRouterConnected = true
     }
     
     void onRouterDisconnectedEvent(RouterDisconnectedEvent event) {
-        i2pRouterConnected = false
+        status.i2pRouterConnected = false
+    }
+    
+    void onUploadEvent(UploadEvent event) {
+        if (event.first)
+            status.totalUploadRequests++
+        activeUploaders << event.uploader
+    }
+    
+    private void collectBandwidth() {
+        synchronized (activeUploaders) {
+            for (Uploader uploader: activeUploaders) {
+                int data = uploader.dataSinceLastRead()
+                status.totalUploadedBytes += data
+                synchronized (speedOutCounter) {
+                    speedOutCounter.read(data)
+                }
+            }
+        }
+    }
+    
+    void onUploadFinishedEvent(UploadFinishedEvent event) {
+        activeUploaders.remove(event.uploader)
+    }
+    
+    SeedboxStatus getStatus() {
+        status.sharedFiles = core.getFileManager().getFileToSharedFile().size()
+        
+        int connectionsIn = 0
+        int connectionsOut = 0
+        for (Connection connection : core.getConnectionManager().getConnections()) {
+            if (connection.incoming)
+                connectionsIn ++
+            else
+                connectionsOut ++
+        }
+        status.connectionsIn = connectionsIn
+        status.connectionsOut = connectionsOut
+        
+        status.uploadsInProgress = activeUploaders.size()
+        
+        synchronized(speedOutCounter) {
+            status.speedOut = speedOutCounter.average()
+        }
+
+        HostCache hc = core.getHostCache()
+        status.hostsKnown = hc.countAllHosts()
+        status.hostsFailing = hc.countFailingHosts()
+        status.hostsHopeless = hc.countHopelessHosts()
+        
+        status
     }
 }
