@@ -78,6 +78,8 @@ class RPCServiceImpl implements RPCService {
             coreService.getCore().getEventBus().publish(event)
             return 1
         } else if (file.isDirectory()) {
+            if (!coreService.getCore().getFileManager().getPositiveTree().contains(file))
+                return 0
             def cb = new MiniFileUnsharedCallback()
             coreService.getCore().getEventBus().register(FileUnsharedEvent.class, cb)
             
