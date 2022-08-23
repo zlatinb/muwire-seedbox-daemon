@@ -15,4 +15,7 @@ class SeedboxStatus {
     int hostsKnown
     int hostsFailing
     int hostsHopeless
+    
+    volatile int totalSearches
+    volatile int totalResponses
 }

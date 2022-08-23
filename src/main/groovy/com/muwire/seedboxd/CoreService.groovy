@@ -8,6 +8,8 @@ import com.muwire.core.UILoadedEvent
 import com.muwire.core.connection.Connection
 import com.muwire.core.files.AllFilesLoadedEvent
 import com.muwire.core.hostcache.HostCache
+import com.muwire.core.search.ResultsEvent
+import com.muwire.core.search.SearchEvent
 import com.muwire.core.upload.UploadEvent
 import com.muwire.core.upload.UploadFinishedEvent
 import com.muwire.core.upload.Uploader
@@ -76,6 +78,8 @@ class CoreService {
             register(RouterDisconnectedEvent.class, this)
             register(UploadEvent.class, this)
             register(UploadFinishedEvent.class, this)
+            register(SearchEvent.class, this)
+            register(ResultsEvent.class, this)
 
             publish(new UILoadedEvent())
         }
@@ -92,6 +96,14 @@ class CoreService {
     
     void onRouterDisconnectedEvent(RouterDisconnectedEvent event) {
         status.i2pRouterConnected = false
+    }
+    
+    void onSearchEvent(SearchEvent event) {
+        status.totalSearches++
+    }
+    
+    void onResultsEvent(ResultsEvent event) {
+        status.totalResponses++
     }
     
     void onUploadEvent(UploadEvent event) {
