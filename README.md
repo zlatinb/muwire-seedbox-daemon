@@ -41,19 +41,25 @@ The MuWIre core is not published to MavenCentral so it needs to be build locally
 ## Configuration
 Create a file called `application.properties` in the same directory as the .jar file.
 
-The following configuration options are supported
+The following configuration options are required
 
-|Name|Description|Required|
+|Name|Description|
+|---|---|
+|i2p.host|Host where the I2P or I2Pd router is running|
+|i2p.port|Port on which the I2CP interface is listening|
+|muwire.nickname|NIckname to use on the MuWire network|
+|muwire.workDir|Directory to use for storing file indices and others|
+|rpc.iface|Interface on which to bind the JSON-RPC endpoint|
+|rpc.port|Port on which to bind the JSON RPC endpoint|
+
+The following configuration options are optional
+
+|Name|Description|Default value|
 |---|---|---|
-|i2p.host|Host where the I2P or I2Pd router is running|yes|
-|i2p.port|Port on which the I2CP interface is listening|yes|
-|i2p.tunnelLength|How long should the tunnels be |yes|
-|i2p.tunnelQuantity|How many tunnels to build|yes|
-|i2p.tunnelName|Name of the tunnel to report to the I2P router | No|
-|muwire.nickname|NIckname to use on the MuWire network|Yes|
-|muwire.workDir|Directory to use for storing file indices and others|Yes|
-|rpc.iface|Interface on which to bind the JSON-RPC endpoint|Yes|
-|rpc.port|Port on which to bind the JSON RPC endpoint|Yes|
+|i2p.tunnelLength|How long should the tunnels be |3|
+|i2p.tunnelQuantity|How many tunnels to build|4|
+|i2p.tunnelName|Name of the tunnel to report to the I2P router |"MuWire Seedbox"|
+
 
 Optionally, you can enable `Actuator` endpoints for many metrics by adding the following property:
 ```
