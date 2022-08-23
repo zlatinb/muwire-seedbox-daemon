@@ -7,6 +7,7 @@ import com.muwire.core.SharedFile
 import com.muwire.core.files.DirectoryUnsharedEvent
 import com.muwire.core.files.FileSharedEvent
 import com.muwire.core.files.FileUnsharedEvent
+import com.muwire.core.files.directories.Visibility
 import com.muwire.core.files.directories.WatchedDirectory
 import com.muwire.core.files.directories.WatchedDirectoryConfigurationEvent
 import net.i2p.data.Base64
@@ -41,7 +42,8 @@ class RPCServiceImpl implements RPCService {
         def event = new WatchedDirectoryConfigurationEvent(directory: file,
             subfolders: subdirs,
             autoWatch: auto,
-            syncInterval: interval)
+            syncInterval: interval,
+            visibility: Visibility.EVERYONE)
         coreService.getCore().getEventBus().publish(event)
     }
     
