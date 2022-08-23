@@ -4,7 +4,7 @@ The GitHub repo is a read-only mirror of the [I2P GitLab](https://i2pgit.org/zla
 
 A headless MuWire daemon that only shares files and is controlled via JSON-RPC
 
-Status: Planning
+Status: Alpha
 
 ## Reasoning
 
@@ -14,19 +14,21 @@ There has been some demand for a "Seedbox"-type solutions where a headless daemo
 
 The daemon would expose a JSON-RPC endpoint that supports the following actions:
 
-* **share** - shares a directory or file on the local filesystem
-* **unsharePath** - unshares a directory or file on the local filesystem
-* **unshareHash** - unshares any files with that hash
-* **filter** - searches the *local library* for a regex and returns matching shared files
-* **change_config** - changes the named configuration setting(s) to a new value
-* **hash_stats** - provided the hash of a file, returns verbose statistics about files matching that hash
-* **status** - returns metrics about the daemon itself such as uptime, connection status, etc.
-* **reload** - reloads the MuWire core without restarting the daemon process
-* **shutdown** - gracefully shuts down the daemon
+|Command|Descirption|Status|
+|---|---|---|
+|share|shares a directory or file on the local filesystem|done|
+|unsharePath|unshares a directory or file on the local filesystem|done with known bugs|
+|unshareHash|unshares any files with that hash|done|
+|filter|searches the *local library* for a regex and returns matching shared files|planned|
+|change_config|changes the named configuration setting(s) to a new value|maybe never|
+|hash_stats|provided the hash of a file, returns verbose statistics about files matching that hash|planned|
+|statu|returns metrics about the daemon itself such as uptime, connection status, etc|done|
+|reload| reloads the MuWire core without restarting the daemon process|maybe never|
+|shutdown**|gracefully shuts down the daemon|done|
 
-## Integration with console
+## Integration with consoles and monitoring systems.
 
-The daemon is intended to be integrated with a seedbox console which manages one or more such daemons.
+The daemon is intended to be integrated with a seedbox console which manages one or more such daemons.  It also exposes standard Spring Boot Actuator endpoint which can be integrated with various monitoring systems.  Integration with Zabbix has already been demonstrated.
 
 ## Building
 
