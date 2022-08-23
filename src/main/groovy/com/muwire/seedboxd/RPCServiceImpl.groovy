@@ -6,7 +6,10 @@ import com.muwire.core.InfoHash
 import com.muwire.core.SharedFile
 import com.muwire.core.files.DirectoryUnsharedEvent
 import com.muwire.core.files.FileSharedEvent
+import com.muwire.core.files.FileTree
+import com.muwire.core.files.FileTreeCallback
 import com.muwire.core.files.FileUnsharedEvent
+import com.muwire.core.files.directories.UISyncDirectoryEvent
 import com.muwire.core.files.directories.Visibility
 import com.muwire.core.files.directories.WatchedDirectory
 import com.muwire.core.files.directories.WatchedDirectoryConfigurationEvent
@@ -56,6 +59,26 @@ class RPCServiceImpl implements RPCService {
         rv.auto = wd.autoWatch
         rv.syncInterval = wd.syncInterval
         rv
+    }
+    
+    int syncNow(String path, boolean subdirs) {
+        File dir = new File(path)
+        FileTree tree = coreService.getCore().getFileManager().getPositiveTree()
+        if (!tree.contains(dir))
+            return 0
+        if (!subdirs) {
+            def event = new UISyncDirectoryEvent(directory: dir)
+            coreService.getCore().getEventBus().publish(event)
+            return 1
+        } else {
+            def cb = new DirSyncCallback()
+            tree.traverse(dir, cb)
+            cb.subdirs.each {
+                def event = new UISyncDirectoryEvent(directory: it)
+                coreService.getCore().getEventBus().publish(event)
+            }
+            return cb.subdirs.size()
+        }
     }
     
     int unshareHash(String hash) {
@@ -121,6 +144,24 @@ class RPCServiceImpl implements RPCService {
             while(unshared == -1)
                 wait()
             unshared
+        }
+    }
+    
+    private static class DirSyncCallback implements FileTreeCallback {
+        
+        private final Set<File> subdirs = new HashSet<>()
+
+        @Override
+        void onDirectoryEnter(File file) {
+            subdirs.add(file)
+        }
+
+        @Override
+        void onDirectoryLeave() {
+        }
+
+        @Override
+        void onFile(File file, Object o) {
         }
     }
 }
