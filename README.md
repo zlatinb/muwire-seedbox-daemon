@@ -54,11 +54,18 @@ The following configuration options are required
 
 The following configuration options are optional
 
-|Name|Description|Default value|
-|---|---|---|
-|i2p.tunnelLength|How long should the tunnels be |3|
-|i2p.tunnelQuantity|How many tunnels to build|4|
-|i2p.tunnelName|Name of the tunnel to report to the I2P router |"MuWire Seedbox"|
+|Name| Description                                       |Default value|
+|---|---------------------------------------------------|---|
+|i2p.tunnelLength| How long should the tunnels be                    |3|
+|i2p.tunnelQuantity| How many tunnels to build                         |4|
+|i2p.tunnelName| Name of the tunnel to report to the I2P router    |"MuWire Seedbox"|
+|muwire.allowBrowsing| Whether to allow browsing of shared files         |true|
+|muwire.allowRegexQueries| Whether to allow regular expression queries       |true|
+|muwire.totalUploadSlots| How many uploads to allow simultaneously          |-1(unlimited)|
+|muwire.uploadSlotsPerUser| How many simultaneous uploads to allow per user   |-1(unlimited)|
+|muwire.hashingCores| How many CPU cores to use for hashing files       | Available cores / 4 |
+|muwire.throttleLoadingFiles| Whether to throttle loading of library on startup |false|
+|muwire.enableFeed|Whether to enable and auto-publish files to the feed| false|
 
 
 Optionally, you can enable `Actuator` endpoints for many metrics by adding the following property:

@@ -67,7 +67,19 @@ class CoreService {
         // set up MuWire settings
         MuWireSettings muWireSettings = new MuWireSettings()
         muWireSettings.nickname = muWireConfig.getNickname()
+        muWireSettings.browseFiles = muWireConfig.getAllowBrowsing()
+        muWireSettings.regexQueries = muWireConfig.getAllowRegexQueries()
+        muWireSettings.totalUploadSlots = muWireConfig.getTotalUploadSlots()
+        muWireSettings.uploadSlotsPerUser = muWireConfig.getUploadSlotsPerUser()
+        muWireSettings.hashingCores = muWireConfig.getHashingCores()
+        muWireSettings.throttleLoadingFiles = muWireConfig.getThrottleLoadingFiles()
+        
+        muWireSettings.fileFeed = muWireConfig.getEnableFeed()
+        muWireSettings.advertiseFeed = muWireConfig.getEnableFeed()
+        muWireSettings.autoPublishSharedFiles = muWireConfig.getEnableFeed()
+        
         muWireSettings.disableUpdates = true
+        muWireSettings.allowMessages = false
         // TODO: set reasonable defaults for other values
         
         core = new Core(muWireSettings, home, "0.8.12") // version doesn't matter

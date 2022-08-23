@@ -4,18 +4,20 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.validation.annotation.Validated
 
-@ConstructorBinding
 @ConfigurationProperties("muwire")
 @Validated
 class MuWireConfig {
     @MuWireNickname
-    final String nickname
+    String nickname
     
     @WriteableDir
-    final File workDir
+    File workDir
     
-    MuWireConfig(String nickname, File workDir) {
-        this.nickname = nickname
-        this.workDir = workDir
-    }
+    boolean allowBrowsing = true
+    boolean allowRegexQueries = true
+    int totalUploadSlots = -1
+    int uploadSlotsPerUser = -1
+    int hashingCores = Runtime.getRuntime().availableProcessors() / 4
+    boolean throttleLoadingFiles = false
+    boolean enableFeed = false
 }
