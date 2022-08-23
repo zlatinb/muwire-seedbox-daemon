@@ -101,14 +101,16 @@ class CoreService {
     }
     
     private void collectBandwidth() {
+        int total = 0
         synchronized (activeUploaders) {
             for (Uploader uploader: activeUploaders) {
                 int data = uploader.dataSinceLastRead()
                 status.totalUploadedBytes += data
-                synchronized (speedOutCounter) {
-                    speedOutCounter.read(data)
-                }
+                total += data
             }
+        }
+        synchronized (speedOutCounter) {
+            speedOutCounter.read(total)
         }
     }
     
