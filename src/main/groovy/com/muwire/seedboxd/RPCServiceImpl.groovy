@@ -7,6 +7,8 @@ import com.muwire.core.SharedFile
 import com.muwire.core.files.DirectoryUnsharedEvent
 import com.muwire.core.files.FileSharedEvent
 import com.muwire.core.files.FileUnsharedEvent
+import com.muwire.core.files.directories.WatchedDirectory
+import com.muwire.core.files.directories.WatchedDirectoryConfigurationEvent
 import net.i2p.data.Base64
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,6 +34,26 @@ class RPCServiceImpl implements RPCService {
         def event = new FileSharedEvent(file: file, fromWatch: false)
         coreService.getCore().getEventBus().publish(event)
         true
+    }
+    
+    void configDir(String path, boolean subdirs, boolean auto, int interval) {
+        File file = new File(path)
+        def event = new WatchedDirectoryConfigurationEvent(directory: file,
+            subfolders: subdirs,
+            autoWatch: auto,
+            syncInterval: interval)
+        coreService.getCore().getEventBus().publish(event)
+    }
+    
+    FolderConfiguration getConfig(String path) {
+        File file = new File(path)
+        WatchedDirectory wd = coreService.getCore().getWatchedDirectoryManager().getDirectory(file)
+        if (wd == null)
+            return null
+        FolderConfiguration rv = new FolderConfiguration()
+        rv.auto = wd.autoWatch
+        rv.syncInterval = wd.syncInterval
+        rv
     }
     
     int unshareHash(String hash) {
