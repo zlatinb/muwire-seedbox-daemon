@@ -19,7 +19,7 @@ class MuWireConfig {
     boolean allowRegexQueries = true
     int totalUploadSlots = -1
     int uploadSlotsPerUser = -1
-    @Min(value = 1, message = "You need at least one CPU core for hashing")
+    @Min(value = 1L, message = "You need at least one CPU core for hashing")
     int hashingCores = Math.max(1,(int)(Runtime.getRuntime().availableProcessors() / 4))
     boolean throttleLoadingFiles = false
     boolean enableFeed = false
