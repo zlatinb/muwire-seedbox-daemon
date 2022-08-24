@@ -17,7 +17,7 @@ class MuWireConfig {
     boolean allowRegexQueries = true
     int totalUploadSlots = -1
     int uploadSlotsPerUser = -1
-    int hashingCores = Runtime.getRuntime().availableProcessors() / 4
+    int hashingCores = Math.max(1,(int)(Runtime.getRuntime().availableProcessors() / 4))
     boolean throttleLoadingFiles = false
     boolean enableFeed = false
 }
