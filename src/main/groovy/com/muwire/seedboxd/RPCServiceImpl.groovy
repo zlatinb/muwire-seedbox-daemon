@@ -40,14 +40,17 @@ class RPCServiceImpl implements RPCService {
         true
     }
     
-    void configDir(String path, boolean subdirs, boolean auto, int interval) {
+    boolean configDir(String path, boolean subdirs, boolean auto, int interval) {
         File file = new File(path)
+        if (coreService.getCore().getWatchedDirectoryManager().getDirectory(file) == null)
+            return false
         def event = new WatchedDirectoryConfigurationEvent(directory: file,
             subfolders: subdirs,
             autoWatch: auto,
             syncInterval: interval,
             visibility: Visibility.EVERYONE)
         coreService.getCore().getEventBus().publish(event)
+        true
     }
     
     FolderConfiguration getConfig(String path) {
