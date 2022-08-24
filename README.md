@@ -12,19 +12,7 @@ There has been some demand for a "Seedbox"-type solutions where a headless daemo
 
 ## API
 
-The daemon would expose a JSON-RPC endpoint that supports the following actions:
-
-|Command|Descirption|Status|
-|---|---|---|
-|share|shares a directory or file on the local filesystem|done|
-|unsharePath|unshares a directory or file on the local filesystem|done with known bugs|
-|unshareHash|unshares any files with that hash|done|
-|filter|searches the *local library* for a regex and returns matching shared files|planned|
-|change_config|changes the named configuration setting(s) to a new value|maybe never|
-|hash_stats|provided the hash of a file, returns verbose statistics about files matching that hash|planned|
-|statu|returns metrics about the daemon itself such as uptime, connection status, etc|done|
-|reload| reloads the MuWire core without restarting the daemon process|maybe never|
-|shutdown**|gracefully shuts down the daemon|done|
+See the `RPC-API.md` file for the latest documentation of the JSON-RPC api.
 
 ## Integration with consoles and monitoring systems.
 
