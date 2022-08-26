@@ -1,0 +1,579 @@
+zabbix_export:
+  version: '6.2'
+  date: '2022-08-26T10:51:02Z'
+  template_groups:
+    -
+      uuid: a571c0d144b14fd4a87a9d9b2aa9fcd6
+      name: Templates/Applications
+  templates:
+    -
+      uuid: 1d2f4fd2624043c3bbf86024b284ebd5
+      template: 'MuWire I2P Daemon'
+      name: 'MuWire I2P Daemon'
+      description: |
+        Шаблон для мониторинга MuWire Seedbox Daemon.
+        
+        Макросы
+        MUWIRE_ACTUATOR_PORT - Порт на котором слушает ACTUATOR
+        
+        (с) Viktor Tatarnikov
+      groups:
+        -
+          name: Templates/Applications
+      items:
+        -
+          uuid: d7c334b2b4b24edb8aceebf338dccd34
+          name: 'SeedBox All Files Locked'
+          type: HTTP_AGENT
+          key: muwire.allFilesLoaded
+          history: 1w
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.allFilesLoaded
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 15d7949f2e0e45d8a9cd5e0f6f079865
+          name: Health
+          type: HTTP_AGENT
+          key: muwire.health
+          history: 1w
+          trends: '0'
+          value_type: TEXT
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/health'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 54f506e9966d4b108096260630f6941a
+          name: Status
+          type: DEPENDENT
+          key: 'muwire.health[status]'
+          delay: '0'
+          history: 1w
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.status
+          master_item:
+            key: muwire.health
+          tags:
+            -
+              tag: Application
+              value: MuWire
+          triggers:
+            -
+              uuid: 53a0f2d6cd8042b3b0f8959270efabd1
+              expression: 'find(/MuWire I2P Daemon/muwire.health[status],,"like","DOWN")=1 or nodata(/MuWire I2P Daemon/muwire.health[status],10m)=1'
+              name: 'Health Down'
+              priority: HIGH
+        -
+          uuid: 2fc30803ca4b4e529e29bc4b7a526ca0
+          name: Info
+          type: HTTP_AGENT
+          key: muwire.info
+          delay: 2h
+          trends: '0'
+          value_type: TEXT
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/info'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 9394d267532e44b88b91d277a9ad49a6
+          name: Version
+          type: DEPENDENT
+          key: 'muwire.info.build[version]'
+          delay: '0'
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.build.version
+          master_item:
+            key: muwire.info
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: ec2cfb7f73854521bbe1f350d7d99893
+          name: 'SeedBox Name'
+          type: HTTP_AGENT
+          key: muwire.name
+          delay: 10m
+          history: 1w
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.muwireName
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: a7cc8ee2ab3d475cac943e24a801ab69
+          name: 'SeedBox Network Connections IN'
+          type: HTTP_AGENT
+          key: muwire.network.connections.in
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.connectionsIn
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 2eecc2b6bc2e4b4e813748ff0922724c
+          name: 'SeedBox Network Connections OUT'
+          type: HTTP_AGENT
+          key: muwire.network.connections.out
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.connectionsOut
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 4b64a1e1e2a84382a700a50fff33c0e1
+          name: 'SeedBox Network Hosts Failing'
+          type: HTTP_AGENT
+          key: muwire.network.hosts.failing
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.hostsFailing
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: a1140df2ef2c4ceb857b202b45bd9f04
+          name: 'SeedBox Network Hosts Hopeless'
+          type: HTTP_AGENT
+          key: muwire.network.hosts.hopeless
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.hostsHopeless
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 605f91e8eb994e60ba47f4a493200a7e
+          name: 'SeedBox Network Hosts Known'
+          type: HTTP_AGENT
+          key: muwire.network.hosts.known
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.hostsKnown
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: ace4deeeb2944cdc8ac7309de4db72d6
+          name: 'SeedBox Network I2P Connected'
+          type: HTTP_AGENT
+          key: muwire.network.i2p.connected
+          history: 1w
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.i2pRouterConnected
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+          triggers:
+            -
+              uuid: e753fa56c6884389bb8fb53a18bc8560
+              expression: 'find(/MuWire I2P Daemon/muwire.network.i2p.connected,,"like","false")=1 or nodata(/MuWire I2P Daemon/muwire.network.i2p.connected,10m)=1'
+              name: 'I2P Down'
+              priority: HIGH
+        -
+          uuid: 660751119b154010a2cce831c7078d47
+          name: 'SeedBox Network Speed Out'
+          type: HTTP_AGENT
+          key: muwire.network.speed.out
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.speedOut
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 999efa5311534c7988c8a7978b01675f
+          name: 'SeedBox Shared Files'
+          type: HTTP_AGENT
+          key: muwire.shared.files
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.sharedFiles
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 563b39d0679a4f7ba1a63991672d8c79
+          name: 'JVM Classes Loaded'
+          type: HTTP_AGENT
+          key: muwire_metrics.jvm.classes.loaded
+          delay: 10m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.measurements[0].value'
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/metrics/jvm.classes.loaded'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: e1c0fe8648044673a88864084b813d2a
+          name: 'JVM GC Live Data Size'
+          type: HTTP_AGENT
+          key: muwire_metrics.jvm.gc.live.data.size
+          delay: 10m
+          value_type: FLOAT
+          units: bytes
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.measurements[0].value'
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/metrics/jvm.gc.live.data.size'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 83a7fbbbdd76476a96e6fae5ea38c318
+          name: 'JVM Heap Memory Used'
+          type: HTTP_AGENT
+          key: 'muwire_metrics.jvm.memory.used[heap]'
+          delay: 10m
+          value_type: FLOAT
+          units: bytes
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.measurements[0].value'
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/metrics/jvm.memory.used'
+          query_fields:
+            -
+              name: tag
+              value: 'area:heap'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: ba385cc2491c48be9eeb6f5fa7874ba3
+          name: 'JVM Non-Heap Memory Used'
+          type: HTTP_AGENT
+          key: 'muwire_metrics.jvm.memory.used[nonheap]'
+          delay: 10m
+          value_type: FLOAT
+          units: bytes
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.measurements[0].value'
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/metrics/jvm.memory.used'
+          query_fields:
+            -
+              name: tag
+              value: 'area:nonheap'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 735d34c85431408d9ae84559cb55f663
+          name: 'JVM Live Daemon Threads'
+          type: HTTP_AGENT
+          key: muwire_metrics.jvm.threads.daemon
+          delay: 10m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.measurements[0].value'
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/metrics/jvm.threads.daemon'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 4b517c6ef5ef4130a4533c0c928ada44
+          name: 'JVM Live Threads'
+          type: HTTP_AGENT
+          key: muwire_metrics.jvm.threads.live
+          delay: 10m
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.measurements[0].value'
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/metrics/jvm.threads.live'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: d6447649c3b04730b9949a39d3baeeec
+          name: 'Process Uptime'
+          type: HTTP_AGENT
+          key: muwire_metrics.process.uptime
+          delay: 10m
+          value_type: FLOAT
+          units: seconds
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.measurements[0].value'
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/metrics/process.uptime'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: f227499c23c641bdadc73b9865878aab
+          name: 'Process CPU Usage'
+          type: HTTP_AGENT
+          key: muwire_process.cpu.usage
+          delay: 10m
+          value_type: FLOAT
+          units: '%'
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - '$.measurements[0].value'
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/metrics/process.cpu.usage'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 431db04cf9514dc1bfb4cbee0e523623
+          name: 'SeedBox Total Uploaded Bytes'
+          type: HTTP_AGENT
+          key: muwire_totalUploadedBytes
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.totalUploadedBytes
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 3323224b954740d498fe0651c760a81e
+          name: 'SeedBox Total Upload Requests'
+          type: HTTP_AGENT
+          key: muwire_totalUploadRequests
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.totalUploadRequests
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+        -
+          uuid: 4ac8c2565eba4e99b4ab226b3de2bbc5
+          name: 'SeedBox Uploads In Progress'
+          type: HTTP_AGENT
+          key: muwire_uploadsInProgress
+          history: 1w
+          preprocessing:
+            -
+              type: JSONPATH
+              parameters:
+                - $.uploadsInProgress
+          url: 'http://{HOST.CONN}:{$MUWIRE_ACTUATOR_PORT}/actuator/muwire'
+          follow_redirects: 'NO'
+          tags:
+            -
+              tag: Application
+              value: MuWire
+      tags:
+        -
+          tag: Application
+          value: MuWire
+      macros:
+        -
+          macro: '{$MUWIRE_ACRUATOR_BASIC_PASSWORD}'
+        -
+          macro: '{$MUWIRE_ACRUATOR_BASIC_USERNAME}'
+        -
+          macro: '{$MUWIRE_ACTUATOR_PORT}'
+          value: '9080'
+  graphs:
+    -
+      uuid: 697ee8483dba410c9d554aabc7a2e695
+      name: 'JVM Memory'
+      yaxismax: '0'
+      show_work_period: 'NO'
+      show_triggers: 'NO'
+      type: PIE
+      show_3d: 'YES'
+      graph_items:
+        -
+          color: 199C0D
+          calc_fnc: LAST
+          item:
+            host: 'MuWire I2P Daemon'
+            key: 'muwire_metrics.jvm.memory.used[heap]'
+        -
+          sortorder: '1'
+          color: F63100
+          calc_fnc: LAST
+          item:
+            host: 'MuWire I2P Daemon'
+            key: 'muwire_metrics.jvm.memory.used[nonheap]'
+    -
+      uuid: a52bd7caefda4d17abb3480642bdb9b2
+      name: 'JVM Memory Used'
+      type: STACKED
+      graph_items:
+        -
+          color: FF0000
+          calc_fnc: ALL
+          item:
+            host: 'MuWire I2P Daemon'
+            key: 'muwire_metrics.jvm.memory.used[nonheap]'
+        -
+          sortorder: '1'
+          color: 00FF00
+          calc_fnc: ALL
+          item:
+            host: 'MuWire I2P Daemon'
+            key: 'muwire_metrics.jvm.memory.used[heap]'
+    -
+      uuid: ab4d0d516b2144899bf07fedd73f188b
+      name: 'JVM Threads'
+      type: STACKED
+      graph_items:
+        -
+          color: 0040FF
+          calc_fnc: ALL
+          item:
+            host: 'MuWire I2P Daemon'
+            key: muwire_metrics.jvm.threads.daemon
+        -
+          sortorder: '1'
+          color: 00FF00
+          calc_fnc: ALL
+          item:
+            host: 'MuWire I2P Daemon'
+            key: muwire_metrics.jvm.threads.live
+    -
+      uuid: 51f58ab56e684669a6b1587680b622a0
+      name: 'Network Hosts'
+      graph_items:
+        -
+          color: FF0000
+          calc_fnc: ALL
+          item:
+            host: 'MuWire I2P Daemon'
+            key: muwire.network.hosts.failing
+        -
+          sortorder: '1'
+          color: FFFF00
+          calc_fnc: ALL
+          item:
+            host: 'MuWire I2P Daemon'
+            key: muwire.network.hosts.hopeless
+        -
+          sortorder: '2'
+          color: 00FF00
+          calc_fnc: ALL
+          item:
+            host: 'MuWire I2P Daemon'
+            key: muwire.network.hosts.known

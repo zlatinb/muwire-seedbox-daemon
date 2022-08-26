@@ -16,7 +16,7 @@ See the `RPC-API.md` file for the latest documentation of the JSON-RPC api.
 
 ## Integration with consoles and monitoring systems.
 
-The daemon is intended to be integrated with a seedbox console which manages one or more such daemons.  It also exposes standard Spring Boot Actuator endpoint which can be integrated with various monitoring systems.  Integration with Zabbix has already been demonstrated.
+The daemon is intended to be integrated with a seedbox console which manages one or more such daemons.  It also exposes standard Spring Boot Actuator endpoint which can be integrated with various monitoring systems.  Integration with Zabbix has already been demonstrated and a template file is available in this source - `zbx_muwire-seedbox_template_v0.1.yaml`
 
 ## Building
 
