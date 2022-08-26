@@ -20,13 +20,20 @@ The daemon is intended to be integrated with a seedbox console which manages one
 
 ## Building
 
-The MuWIre core is not published to MavenCentral so it needs to be build locally.  You only need to perform this step once.
-1. Clone the `muwire` project
-2. Execute `./gradlew core:publish` in that project
-3. Back to this project, execute `./gradlew assemble`
-3. An executable .jar file will be created in `build/libs`
+### The MuWire Core artifact
+The MuWIre core is not published to MavenCentral yet so it needs to be build locally.  You only need to perform this step once.
+
+1. Clone the `muwire` project and go inside the `muwire` folder
+2. `git checkout seedbox-core-0.1.0`
+2. `./gradlew core:publish`
+
+### The Seedbox Daemon
+1. Back to this project, execute `./gradlew assemble`
+2. An executable .jar file will be created in `build/libs`
 
 ## Configuration
+
+### The `application.properties` file
 Create a file called `application.properties` in the same directory as the .jar file.
 
 The following configuration options are required
@@ -56,21 +63,31 @@ The following configuration options are optional
 |muwire.enableFeed|Whether to enable and auto-publish files to the feed| false|
 
 
+### The `Actuator` endpoints
 Optionally, you can enable `Actuator` endpoints for many metrics by adding the following property:
 ```
 management.endpoints.web.exposure.include=*
 ```
 Go to `/actuator` to asee all available endpoints.  MuWire-specific metrics are available at `/actuator/muwire`
 
+### Logging
 
+There are [many standard ways](https://docs.spring.io/spring-boot/docs/2.0.1.RELEASE/reference/html/boot-features-logging.html)
+to configure logging for Spring Boot applications.  If you just want to get going as quickly as you can, add the following line 
+to `application.properties`:
+```
+logging.level.root = ERROR
+```
 ## Running
-The jar built in the previous step is executable on Linux systems.  You can integrate it with systemd or system V if you like.  The `application.properties` file needs to be in the same directory as the jar file when it's launched.
+The jar built in the first step is executable on Linux systems.  You can integrate it with systemd or system V if you like.  The `application.properties` file needs to be in the same directory as the jar file when it's launched.
 
 If everything goes well, the Spring Boot logo will be printed to stdout.
 
 ## Try some commands
 
-Assuming that you bound the rpc interface to localhost:12345
+See the `RPC-API.md` file for full list of supported commands.
+
+Assuming that you bound the RPC interface to localhost:12345
 
 To check the current status of the seedbox daemon:
 ```
