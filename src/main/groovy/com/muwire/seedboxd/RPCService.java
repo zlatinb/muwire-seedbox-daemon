@@ -8,5 +8,7 @@ public interface RPCService {
     int syncNow(String path, boolean subdirs);
     int unsharePath(String path);
     int unshareHash(String hash);
+    int exportConnections(String path);
+    int importConnections(String path);
     boolean shutdown();
 }

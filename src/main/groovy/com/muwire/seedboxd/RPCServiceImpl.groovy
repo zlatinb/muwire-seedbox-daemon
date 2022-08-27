@@ -13,12 +13,14 @@ import com.muwire.core.files.directories.UISyncDirectoryEvent
 import com.muwire.core.files.directories.Visibility
 import com.muwire.core.files.directories.WatchedDirectory
 import com.muwire.core.files.directories.WatchedDirectoryConfigurationEvent
+import com.muwire.core.hostcache.HostDiscoveredEvent
 import net.i2p.data.Base64
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.stereotype.Component
 
+import net.i2p.data.Destination
 
 @Component
 class RPCServiceImpl implements RPCService {
@@ -119,6 +121,43 @@ class RPCServiceImpl implements RPCService {
             return rv
         }
         return -1
+    }
+    
+    int exportConnections(String path) {
+        File file = new File(path)
+        if (file.exists() && !file.canWrite())
+            return -1
+        
+        if (!file.exists() && !file.createNewFile())
+            return -1
+        
+        int exported = 0
+        file.withPrintWriter {
+            it.println(coreService.getCore().getMe().getDestination().toBase64())
+            exported++
+            List<Destination> toExport = coreService.getCore().getHostCache().getGoodHosts(Integer.MAX_VALUE)
+            for (Destination destination : toExport) {
+                it.println(destination.toBase64())
+                exported++
+            }
+        }
+        
+        exported
+    }
+    
+    int importConnections(String path) {
+        File file = new File(path)
+        if (!file.exists() || !file.canRead())
+            return -1
+        
+        int imported = 0
+        file.eachLine {
+            def dest = new Destination(it)
+            def event = new HostDiscoveredEvent(destination: dest, fromHostcache: true)
+            coreService.getCore().getEventBus().publish(event)
+            imported++
+        }
+        imported
     }
     
     boolean shutdown() {
