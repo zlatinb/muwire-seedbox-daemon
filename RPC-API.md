@@ -61,6 +61,20 @@ Parameter2: boolean (whether to apply to sub-folders)
 
 Returns: Number of folders that will be synced
 
+### *exportConnections*
+Exports a list of good hosts to the specified file
+
+Parameter1: /absolute/path/to/connections/file
+
+Returns: Number of exported connections
+
+### *importConnections*
+Imports connections from a file
+
+Parameter1: /absolute/path/to/connections/file
+
+Returns: Number of imported connections
+
 ### *shutdown*
 Performs a graceful shutdown of the daemon
 
