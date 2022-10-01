@@ -77,6 +77,7 @@ class CoreService {
         muWireSettings.fileFeed = muWireConfig.getEnableFeed()
         muWireSettings.advertiseFeed = muWireConfig.getEnableFeed()
         muWireSettings.autoPublishSharedFiles = muWireConfig.getEnableFeed()
+        muWireSettings.showPaths = muWireConfig.getShowPaths()
         
         muWireSettings.disableUpdates = true
         muWireSettings.allowMessages = false

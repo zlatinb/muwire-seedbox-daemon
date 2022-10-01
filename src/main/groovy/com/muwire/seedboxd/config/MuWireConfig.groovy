@@ -23,4 +23,5 @@ class MuWireConfig {
     int hashingCores = Math.max(1,(int)(Runtime.getRuntime().availableProcessors() / 4))
     boolean throttleLoadingFiles = false
     boolean enableFeed = false
+    boolean showPaths = true
 }

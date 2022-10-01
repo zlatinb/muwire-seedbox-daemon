@@ -61,6 +61,7 @@ The following configuration options are optional
 |muwire.hashingCores| How many CPU cores to use for hashing files       | Available cores / 4 |
 |muwire.throttleLoadingFiles| Whether to throttle loading of library on startup |false|
 |muwire.enableFeed|Whether to enable and auto-publish files to the feed| false|
+|muwire.showPaths|Whether to show folder names in search results | true|
 
 
 ### The `Actuator` endpoints
